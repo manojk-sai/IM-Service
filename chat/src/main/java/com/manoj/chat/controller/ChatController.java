@@ -31,6 +31,11 @@ public class ChatController {
         return chatService.getUserChats(username);
     }
 
+    @GetMapping("/{chatId}")
+    public Chat getChatById(@PathVariable String chatId) {
+        return chatService.getChatById(chatId);
+    }
+
     @PostMapping("/{chatId}/members")
     public Chat addMember(
             @PathVariable String chatId,
