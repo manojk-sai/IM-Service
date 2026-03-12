@@ -16,19 +16,18 @@ import java.util.List;
 public class MessageService {
     private final MessageRepository messageRepository;
     private final RedisTemplate<String, Object> redisTemplate;
-    private final RestTemplate restTemplate;
 
     public MessageService(MessageRepository messageRepository,
-                          RedisTemplate<String, Object> redisTemplate,
-                          RestTemplate restTemplate) {
+                          RedisTemplate<String, Object> redisTemplate) {
         this.messageRepository = messageRepository;
         this.redisTemplate = redisTemplate;
-        this.restTemplate = restTemplate;
     }
 
     public Message save(MessageRequest messageRequest) {
 
         String chatServiceUrl = "http://localhost:8083/api/chats/" + messageRequest.getChatId();
+
+        RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<Chat> response = restTemplate.getForEntity(chatServiceUrl, Chat.class);
 
         if(response.getBody() == null) {

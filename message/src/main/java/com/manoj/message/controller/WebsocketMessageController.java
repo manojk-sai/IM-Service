@@ -22,8 +22,7 @@ public class WebsocketMessageController {
 
     @MessageMapping("/chat.send")
     public void sendMessage(@Payload MessageRequest messageRequest,
-                             @Header("X-User-Username") String senderUsername) {
-
+                            @Header("X-User-Username") String senderUsername){
         if(!senderUsername.equals(messageRequest.getSenderUsername())){
             throw new SecurityException("Sender Username does not match");
         }
@@ -32,5 +31,6 @@ public class WebsocketMessageController {
 
         Message savedMessage = messageService.save(messageRequest);
         messagingTemplate.convertAndSend("/topic/chat/" + savedMessage.getChatId(), savedMessage);
+
     }
 }
