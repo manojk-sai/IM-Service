@@ -19,6 +19,4 @@ spring:
               uri: http://localhost:8083
               predicates:
                 - Path=/api/chats/**
-logging:
-  level:
-    org.springframework.cloud.gateway: DEBUG
+                
