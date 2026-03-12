@@ -48,7 +48,7 @@ public class MessageService {
                 .build();
         Message savedMessage = messageRepository.save(message);
 
-        redisTemplate.opsForList().rightPush("Chat: " + savedMessage.getChatId(),savedMessage);
+        redisTemplate.opsForList().rightPush("Chat:" + savedMessage.getChatId(),savedMessage);
 
         return savedMessage;
     }
