@@ -39,13 +39,14 @@ public class ChatService {
         return chatRepository.findByMembersContaining(userId);
     }
 
-    public Chat addMember(String chatId, String userId) {
+    public Chat addMember(String chatId, String username) {
 
         Chat chat = chatRepository.findById(chatId)
                 .orElseThrow(() -> new RuntimeException("Chat not found"));
-
-        chat.getMembers().add(userId);
-
+        if(chat.getMembers().contains(username)) {
+            throw new RuntimeException("User is already a member of the chat");
+        }
+        chat.getMembers().add(username);
         return chatRepository.save(chat);
     }
 
