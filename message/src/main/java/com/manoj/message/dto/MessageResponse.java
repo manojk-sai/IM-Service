@@ -7,9 +7,7 @@ import java.util.Date;
 
 @Data
 @Builder
-public class MessageReponse {
-    private String id;
-    private String chatId;
+public class MessageResponse {
     private String senderUsername;
     private String content;
     private Date timestamp;
