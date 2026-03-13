@@ -1,6 +1,7 @@
 package com.manoj.message.controller;
 
 import com.manoj.message.dto.MessageRequest;
+import com.manoj.message.dto.MessageResponse;
 import com.manoj.message.model.Message;
 import com.manoj.message.service.MessageService;
 import org.springframework.messaging.handler.annotation.Header;
@@ -21,16 +22,21 @@ public class WebsocketMessageController {
      }
 
     @MessageMapping("/chat.send")
-    public void sendMessage(@Payload MessageRequest messageRequest,
+    public String sendMessage(@Payload MessageRequest messageRequest,
                             @Header("X-User-Username") String senderUsername){
         if(!senderUsername.equals(messageRequest.getSenderUsername())){
             throw new SecurityException("Sender Username does not match");
         }
 
         messageRequest.setSenderUsername(senderUsername);
-
         Message savedMessage = messageService.save(messageRequest);
-        messagingTemplate.convertAndSend("/topic/chat/" + savedMessage.getChatId(), savedMessage);
+        MessageResponse response = MessageResponse.builder()
+                .senderUsername(savedMessage.getSenderUsername())
+                .content(savedMessage.getContent())
+                .timestamp(savedMessage.getTimestamp())
+                .build();
+        messagingTemplate.convertAndSend("/topic/chat/" + savedMessage.getChatId(), response);
 
+        return "Message sent successfully";
     }
 }
